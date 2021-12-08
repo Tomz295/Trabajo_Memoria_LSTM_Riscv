@@ -237,6 +237,19 @@ main:
     //loops while a6 > 0
 
     //---- fa1 -> i
+
+    //matrix multiplication for i, f, g & o
+    //ht vector stored as = [fs0 ... fs3]
+    //x vector stored in x  = [fs4 ... fs8]
+    //Weights and biases must be the following (with proper offsets)
+    // s1, weights_floats_input
+    // s2, weights_floats_hidden
+    // s3, biases_floats_input
+    // s4, biases_floats_hidden
+    //if t=0 flag a7 is 0, else a7=1
+    //(skips Wh*h multiplications as h=0 when t=0)
+    //result is saved at fa6 to be used in tanh or sig functions
+
     //Wxi * x
     flw ft0, 0(s1)
     fmul.s fa6, ft0, fs4
@@ -2184,67 +2197,6 @@ main:
 
 call exit
 
-
-
-
-matrix_mul:
-    //matrix multiplication for i, f, g & o
-    //ht vector stored as = [fs0 ... fs3]
-    //x vector stored in x  = [fs4 ... fs8]
-    //Weights and biases must be the following (with proper offsets)
-    // s1, weights_floats_input
-    // s2, weights_floats_hidden
-    // s3, biases_floats_input
-    // s4, biases_floats_hidden
-    //flag a7 is 0 if t=0, else must be 1
-    //(skips Wh*h multiplications as h=0 when t=0)
-    //result is saved at fa6
-    //must be called with jal a0, matrix_mul;
-
-
-    //Wxi * x
-    flw ft0, 0(s1)
-    fmul.s fa6, ft0, fs4
-
-    flw ft0, 4(s1)
-    fmadd.s fa6, ft0, fs5 ,fa6
-
-    flw ft0, 8(s1)
-    fmadd.s fa6, ft0, fs6 ,fa6
-
-    flw ft0, 12(s1)
-    fmadd.s fa6, ft0, fs7 ,fa6
-
-    flw ft0, 16(s1)
-    fmadd.s fa6, ft0, fs8 ,fa6
-
-    //ans + bx
-    flw ft0, 0(s3)
-    fadd.s fa6, ft0, fa6
-
-    //t=0? (a7=0?) if so, skip Wh*h (h is 0)
-    beqz a7, mat_mul_skip_h
-
-    //ans + (Wh * h)
-    flw ft0, 0(s2)
-    fmadd.s fa6, ft0, fs0, fa6
-
-    flw ft0, 4(s2)
-    fmadd.s fa6, ft0, fs1, fa6
-
-    flw ft0, 8(s2)
-    fmadd.s fa6, ft0, fs2, fa6
-
-    flw ft0, 12(s2)
-    fmadd.s fa6, ft0, fs3, fa6
-
-    mat_mul_skip_h:
-    //ans + bh
-    flw ft0, 0(s4)
-    fadd.s fa6, ft0, fa6
-
-    jr a0;
-//---- end of matrix_mul
 
 
 

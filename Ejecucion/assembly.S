@@ -94,8 +94,8 @@ fc_weight_and_bias:
 
 
 //FC_1 layer values. 64 floats
-fc_1_values:
-.float 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
+//fc_1_values:
+//.float 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
 
 
 floats_ht:
@@ -142,7 +142,8 @@ s7 - s10-> FREE
 s11     -> FeedForward loop counter
 
 a0      -> jal/ret adress
-a1 - a3 -> FC_1 address (only used when calculating FC)
+a1 - a2 -> FC_1 address (only used when calculating FC)
+a3      -> FREE
 a4      -> FREE
 a5      -> Results/Outputs Pointer
 a6      -> LSTM [i] offset counter
@@ -547,7 +548,7 @@ main:
     //addresses for fc_1 weights, biases and results
     la a1, fc_1_weight
     la a2, fc_1_bias
-    la a3, fc_1_values
+    //la a3, fc_1_values
 
     //adresses for fc weights and bias
     la a4, fc_weight_and_bias
@@ -585,7 +586,7 @@ main:
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_0:
 
-    fsw ft0, 0(a3)
+    //fsw ft0, 0(a3)
 
     //relu, then feed to fc
     fle.s t4, ft0, ft3//relu flag
@@ -612,7 +613,6 @@ main:
         flw ft1, 28(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_1:
-    fsw ft0, 4(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_1
         flw ft1, 4(a4)
@@ -637,7 +637,6 @@ main:
         flw ft1, 44(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_2:
-    fsw ft0, 8(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_2
         flw ft1, 8(a4)
@@ -662,7 +661,6 @@ main:
         flw ft1, 60(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_3:
-    fsw ft0, 12(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_3
         flw ft1, 12(a4)
@@ -687,7 +685,6 @@ main:
         flw ft1, 76(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_4:
-    fsw ft0, 16(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_4
         flw ft1, 16(a4)
@@ -712,7 +709,6 @@ main:
         flw ft1, 92(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_5:
-    fsw ft0, 20(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_5
         flw ft1, 20(a4)
@@ -737,7 +733,6 @@ main:
         flw ft1, 108(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_6:
-    fsw ft0, 24(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_6
         flw ft1, 24(a4)
@@ -762,7 +757,6 @@ main:
         flw ft1, 124(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_7:
-    fsw ft0, 28(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_7
         flw ft1, 28(a4)
@@ -787,7 +781,6 @@ main:
         flw ft1, 140(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_8:
-    fsw ft0, 32(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_8
         flw ft1, 32(a4)
@@ -812,7 +805,6 @@ main:
         flw ft1, 156(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_9:
-    fsw ft0, 36(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_9
         flw ft1, 36(a4)
@@ -837,7 +829,6 @@ main:
         flw ft1, 172(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_10:
-    fsw ft0, 40(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_10
         flw ft1, 40(a4)
@@ -862,7 +853,6 @@ main:
         flw ft1, 188(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_11:
-    fsw ft0, 44(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_11
         flw ft1, 44(a4)
@@ -887,7 +877,6 @@ main:
         flw ft1, 204(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_12:
-    fsw ft0, 48(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_12
         flw ft1, 48(a4)
@@ -912,7 +901,6 @@ main:
         flw ft1, 220(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_13:
-    fsw ft0, 52(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_13
         flw ft1, 52(a4)
@@ -937,7 +925,6 @@ main:
         flw ft1, 236(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_14:
-    fsw ft0, 56(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_14
         flw ft1, 56(a4)
@@ -962,7 +949,6 @@ main:
         flw ft1, 252(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_15:
-    fsw ft0, 60(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_15
         flw ft1, 60(a4)
@@ -987,7 +973,6 @@ main:
         flw ft1, 268(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_16:
-    fsw ft0, 64(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_16
         flw ft1, 64(a4)
@@ -1012,7 +997,6 @@ main:
         flw ft1, 284(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_17:
-    fsw ft0, 68(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_17
         flw ft1, 68(a4)
@@ -1037,7 +1021,6 @@ main:
         flw ft1, 300(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_18:
-    fsw ft0, 72(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_18
         flw ft1, 72(a4)
@@ -1062,7 +1045,6 @@ main:
         flw ft1, 316(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_19:
-    fsw ft0, 76(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_19
         flw ft1, 76(a4)
@@ -1087,7 +1069,6 @@ main:
         flw ft1, 332(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_20:
-    fsw ft0, 80(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_20
         flw ft1, 80(a4)
@@ -1112,7 +1093,6 @@ main:
         flw ft1, 348(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_21:
-    fsw ft0, 84(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_21
         flw ft1, 84(a4)
@@ -1137,7 +1117,6 @@ main:
         flw ft1, 364(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_22:
-    fsw ft0, 88(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_22
         flw ft1, 88(a4)
@@ -1162,7 +1141,6 @@ main:
         flw ft1, 380(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_23:
-    fsw ft0, 92(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_23
         flw ft1, 92(a4)
@@ -1187,7 +1165,6 @@ main:
         flw ft1, 396(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_24:
-    fsw ft0, 96(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_24
         flw ft1, 96(a4)
@@ -1212,7 +1189,6 @@ main:
         flw ft1, 412(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_25:
-    fsw ft0, 100(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_25
         flw ft1, 100(a4)
@@ -1237,7 +1213,6 @@ main:
         flw ft1, 428(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_26:
-    fsw ft0, 104(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_26
         flw ft1, 104(a4)
@@ -1262,7 +1237,6 @@ main:
         flw ft1, 444(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_27:
-    fsw ft0, 108(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_27
         flw ft1, 108(a4)
@@ -1287,7 +1261,6 @@ main:
         flw ft1, 460(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_28:
-    fsw ft0, 112(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_28
         flw ft1, 112(a4)
@@ -1312,7 +1285,6 @@ main:
         flw ft1, 476(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_29:
-    fsw ft0, 116(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_29
         flw ft1, 116(a4)
@@ -1337,7 +1309,6 @@ main:
         flw ft1, 492(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_30:
-    fsw ft0, 120(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_30
         flw ft1, 120(a4)
@@ -1362,7 +1333,6 @@ main:
         flw ft1, 508(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_31:
-    fsw ft0, 124(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_31
         flw ft1, 124(a4)
@@ -1387,7 +1357,6 @@ main:
         flw ft1, 524(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_32:
-    fsw ft0, 128(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_32
         flw ft1, 128(a4)
@@ -1412,7 +1381,6 @@ main:
         flw ft1, 540(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_33:
-    fsw ft0, 132(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_33
         flw ft1, 132(a4)
@@ -1437,7 +1405,6 @@ main:
         flw ft1, 556(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_34:
-    fsw ft0, 136(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_34
         flw ft1, 136(a4)
@@ -1462,7 +1429,6 @@ main:
         flw ft1, 572(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_35:
-    fsw ft0, 140(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_35
         flw ft1, 140(a4)
@@ -1487,7 +1453,6 @@ main:
         flw ft1, 588(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_36:
-    fsw ft0, 144(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_36
         flw ft1, 144(a4)
@@ -1512,7 +1477,6 @@ main:
         flw ft1, 604(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_37:
-    fsw ft0, 148(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_37
         flw ft1, 148(a4)
@@ -1537,7 +1501,6 @@ main:
         flw ft1, 620(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_38:
-    fsw ft0, 152(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_38
         flw ft1, 152(a4)
@@ -1562,7 +1525,6 @@ main:
         flw ft1, 636(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_39:
-    fsw ft0, 156(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_39
         flw ft1, 156(a4)
@@ -1587,7 +1549,6 @@ main:
         flw ft1, 652(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_40:
-    fsw ft0, 160(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_40
         flw ft1, 160(a4)
@@ -1612,7 +1573,6 @@ main:
         flw ft1, 668(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_41:
-    fsw ft0, 164(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_41
         flw ft1, 164(a4)
@@ -1637,7 +1597,6 @@ main:
         flw ft1, 684(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_42:
-    fsw ft0, 168(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_42
         flw ft1, 168(a4)
@@ -1662,7 +1621,6 @@ main:
         flw ft1, 700(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_43:
-    fsw ft0, 172(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_43
         flw ft1, 172(a4)
@@ -1687,7 +1645,6 @@ main:
         flw ft1, 716(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_44:
-    fsw ft0, 176(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_44
         flw ft1, 176(a4)
@@ -1712,7 +1669,6 @@ main:
         flw ft1, 732(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_45:
-    fsw ft0, 180(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_45
         flw ft1, 180(a4)
@@ -1737,7 +1693,6 @@ main:
         flw ft1, 748(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_46:
-    fsw ft0, 184(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_46
         flw ft1, 184(a4)
@@ -1762,7 +1717,6 @@ main:
         flw ft1, 764(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_47:
-    fsw ft0, 188(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_47
         flw ft1, 188(a4)
@@ -1787,7 +1741,6 @@ main:
         flw ft1, 780(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_48:
-    fsw ft0, 192(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_48
         flw ft1, 192(a4)
@@ -1812,7 +1765,6 @@ main:
         flw ft1, 796(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_49:
-    fsw ft0, 196(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_49
         flw ft1, 196(a4)
@@ -1837,7 +1789,6 @@ main:
         flw ft1, 812(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_50:
-    fsw ft0, 200(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_50
         flw ft1, 200(a4)
@@ -1862,7 +1813,6 @@ main:
         flw ft1, 828(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_51:
-    fsw ft0, 204(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_51
         flw ft1, 204(a4)
@@ -1887,7 +1837,6 @@ main:
         flw ft1, 844(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_52:
-    fsw ft0, 208(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_52
         flw ft1, 208(a4)
@@ -1912,7 +1861,6 @@ main:
         flw ft1, 860(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_53:
-    fsw ft0, 212(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_53
         flw ft1, 212(a4)
@@ -1937,7 +1885,6 @@ main:
         flw ft1, 876(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_54:
-    fsw ft0, 216(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_54
         flw ft1, 216(a4)
@@ -1962,7 +1909,6 @@ main:
         flw ft1, 892(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_55:
-    fsw ft0, 220(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_55
         flw ft1, 220(a4)
@@ -1987,7 +1933,6 @@ main:
         flw ft1, 908(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_56:
-    fsw ft0, 224(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_56
         flw ft1, 224(a4)
@@ -2012,7 +1957,6 @@ main:
         flw ft1, 924(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_57:
-    fsw ft0, 228(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_57
         flw ft1, 228(a4)
@@ -2037,7 +1981,6 @@ main:
         flw ft1, 940(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_58:
-    fsw ft0, 232(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_58
         flw ft1, 232(a4)
@@ -2062,7 +2005,6 @@ main:
         flw ft1, 956(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_59:
-    fsw ft0, 236(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_59
         flw ft1, 236(a4)
@@ -2087,7 +2029,6 @@ main:
         flw ft1, 972(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_60:
-    fsw ft0, 240(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_60
         flw ft1, 240(a4)
@@ -2112,7 +2053,6 @@ main:
         flw ft1, 988(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_61:
-    fsw ft0, 244(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_61
         flw ft1, 244(a4)
@@ -2137,7 +2077,6 @@ main:
         flw ft1, 1004(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_62:
-    fsw ft0, 248(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_62
         flw ft1, 248(a4)
@@ -2162,7 +2101,6 @@ main:
         flw ft1, 1020(a1)
         fmadd.s ft0, ft1, fs3, ft0
     skip_3_63:
-    fsw ft0, 252(a3)
     fle.s t4, ft0, ft3
     bnez t4, skip_fc_63
         flw ft1, 252(a4)

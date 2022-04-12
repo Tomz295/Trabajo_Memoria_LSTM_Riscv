@@ -2672,7 +2672,7 @@ main:
     //      get dL/dh10 [k] += dL/dfc1 [i] * fc_1_weight[i][k] -> save into [fs4, ..., fs7]
 
     //for vectors, each [i] is an extra offset of 4
-    //for matices, each cloumn [k] is +4, each row[i] is +rowLength*4 (+(4*4)=+16 in this case)
+    //for matrices, each cloumn [k] is +4, each row[i] is +rowLength*4 (+(4*4)=+16 in this case)
     //this is once again loop unrolled to avoid addi instructions that would mess with the
     //adresses
 
